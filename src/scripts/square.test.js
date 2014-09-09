@@ -29,7 +29,7 @@ describe('div.pippo', function() {
     });
 
     it('should have no class other than pippo', function() {
-      expect(el.className).to.not.be.equal('pippo')
+      expect(el.className).to.be.equal('pippo');
     });
   });
 });
