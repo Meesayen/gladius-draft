@@ -1,0 +1,24 @@
+{{#partial "content"}}
+  <script>
+    {{precompile "partials/bookingForm"}}
+  </script>
+
+  <h2>Ah! This is awesome.</h2>
+
+  <p>Look how cool I am</p>
+
+  <p>unescaped url below</p>
+  <br>
+  {{{taggedAnchor "//www.ryanair.com" "Ryanair"}}}
+
+  {{#with analytics}}
+    <br>
+    {{configuration.name}}
+    <br>
+    {{configuration.id}}
+    <br>
+  {{/with}}
+
+{{/partial}}
+
+{{> mainlayout}}

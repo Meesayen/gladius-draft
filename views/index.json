@@ -1,0 +1,15 @@
+{
+  "appScript": "index.js",
+
+  "content" : {
+    "title": "SEO Title",
+    "powered_by": "Powered by Handlebars.java"
+  },
+
+  "analytics": {
+    "configuration": {
+      "name": "Analytics Name",
+      "id": "Analytics ID"
+    }
+  }
+}
