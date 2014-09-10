@@ -1,8 +1,7 @@
 var
   gulp   = require('gulp'),
-  clean   = require('gulp-clean'),
+  clean   = require('gulp-rimraf'),
   cache = require('gulp-cached'),
-  insert = require('gulp-insert'),
   jshint = require('gulp-jshint'),
   esnext = require('gulp-esnext'),
   nextModule = require('gulp-es6-module-transpiler'),
@@ -21,8 +20,6 @@ var
   server = require('./app'),
   serverport = 5000,
   lrport = null,
-  publishHelpers,
-  es6manifest,
   cleanTmp;
 
 
@@ -31,22 +28,6 @@ cleanTmp = function() {
   gulp.src('src/temp', {read: false})
   .pipe(clean());
 };
-
-/* ES Transpiled modules manifest ------------------------------------------ */
-es6manifest = [
-  '/*',
-  ' ---------------------',
-  ' ES6 Transpiled Module',
-  ' ---------------------',
-  ' ',
-  ' This file is an ES5-compatible module produced via the transpilation of ',
-  ' files that take full advantage of the new ES6 syntax.',
-  ' Therefor it is not meant to be modified by hand by anyone.',
-  ' Please, implement your changes into the appropriate .es6 file, thank you.',
-  ' ',
-  ' F. Giovagnoli',
-  '/\n\n'
-].join('\n *');
 
 
 /*
@@ -103,6 +84,22 @@ gulp.task('tpl-reload', ['tpl-precompile'], function() {
   SCRIPTS TASKS
                 */
 
+/* JS linting -------------------------------------------------------------- */
+gulp.task('lint', function() {
+  return gulp.src([
+    '*.helpers.js',
+    'src/scripts/**/*.js',
+    'src/scripts/**/*.es6',
+    '!src/**/*.es6.js',
+    '!src/scripts/vendor/**/*',
+    '!src/scripts/mock/lib/**/*'
+  ])
+  .pipe(jshint({
+    lookup: true
+  }))
+  .pipe(jshint.reporter('jshint-stylish'));
+});
+
 /* ES6 Syntax transpilation ------------------------------------------------ */
 gulp.task('esnext', ['copy'], function () {
   return gulp.src([
@@ -120,24 +117,7 @@ gulp.task('esnext', ['copy'], function () {
   .pipe(replace(/\.throw/g, "['throw']"))
   .pipe(replace(/\.return/g, "['return']"))
 
-  .pipe(insert.prepend(es6manifest))
   .pipe(gulp.dest('src/temp'));
-});
-
-/* JS linting -------------------------------------------------------------- */
-gulp.task('lint', function() {
-  return gulp.src([
-    '*.helpers.js',
-    'src/scripts/**/*.js',
-    'src/scripts/**/*.es6',
-    '!src/**/*.es6.js',
-    '!src/scripts/vendor/**/*',
-    '!src/scripts/mock/lib/**/*'
-  ])
-  .pipe(jshint({
-    lookup: true
-  }))
-  .pipe(jshint.reporter('jshint-stylish'));
 });
 
 
@@ -165,7 +145,7 @@ gulp.task('bundle-js:dev', ['bundle-mock-server'], function() {
   }))
   .pipe(gulp.dest('public/js'));
 });
-gulp.task('bundle-mock-server', ['lint', 'karma'], function() {
+gulp.task('bundle-mock-server', ['lint', 'esnext'], function() {
   return gulp.src(['src/temp/mock/server.js'])
   .pipe(browserify({
     insertGlobals: false,
@@ -178,7 +158,7 @@ gulp.task('bundle-mock-server', ['lint', 'karma'], function() {
 });
 
 /* JS unit tests runner ---------------------------------------------------- */
-gulp.task('karma', ['esnext'], function() {
+gulp.task('karma', function() {
   return gulp.src([
     'temp/vendor/handlebars.runtime.js',
     'temp/**/*.test.js'
@@ -191,12 +171,18 @@ gulp.task('karma', ['esnext'], function() {
     // throw err;
   });
 });
-
-
-gulp.task('reload', function() {
-  gulp.src('public/**/*')
-  .pipe(cache('reloading'))
-  .pipe(livereload(lrport));
+gulp.task('karma:dev', function() {
+  return gulp.src([
+    'temp/vendor/handlebars.runtime.js',
+    'temp/**/*.test.js'
+  ])
+  .pipe(karma({
+    configFile: 'karma.conf.js',
+    action: 'watch'
+  }))
+  .on('error', function(/*err*/) {
+    // throw err;
+  });
 });
 
 
@@ -218,6 +204,12 @@ gulp.task('bundle-js:dev:clean', [
   'bundle-js:dev'
 ], cleanTmp);
 
+gulp.task('reload', function() {
+  gulp.src('public/**/*')
+  .pipe(cache('reloading'))
+  .pipe(livereload(lrport));
+});
+
 
 /* Watchers ---------------------------------------------------------------- */
 gulp.task('watch', ['serve'], function () {
@@ -236,13 +228,12 @@ gulp.task('watch', ['serve'], function () {
 
 // do not change these tasks unless you really know what you are doing
 // they are called by maven during the build process
-gulp.task('default', [
-  'development'
-], cleanTmp);
+gulp.task('default', ['development']);
 
 gulp.task('development', [
+  'karma:dev',
   'less',
-  'bundle-js:dev',
+  'bundle-js:dev:clean',
   'publish-helpers',
   'tpl-precompile',
   'watch'

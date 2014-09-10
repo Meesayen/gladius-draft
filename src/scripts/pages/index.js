@@ -47,3 +47,6 @@ setTimeout(function() {
       // console.log(err);
     });
 }, 4000);
+
+// Stupid thing for a stupid test.
+module.exports.index = true;

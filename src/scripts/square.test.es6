@@ -1,59 +1,59 @@
-var square = require('./square.js');
-var tpl = require('./core/tpl.es6');
+import { square } from './square.js';
+import { renderString } from './core/tpl.es6';
 
-describe('square', function(){
-  it('should produce squared result', function () {
-    expect(square.square(4)).to.equal(16);
+describe('square', () => {
+  it('should produce squared result',  () => {
+    expect(square(4)).to.equal(16);
   });
 });
 
-describe('div.pippo', function() {
+describe('div.pippo', () => {
   var container;
 
-  beforeEach(function() {
+  beforeEach(() => {
     var pippo = document.createElement('div');
     pippo.classList.add('pippo');
     container = document.createElement("div");
     container.appendChild(pippo);
     document.body.appendChild(container);
   });
-  afterEach(function() {
+  afterEach(() => {
     document.body.removeChild(container);
   });
 
-  describe('when instantiated without parameters', function() {
+  describe('when instantiated without parameters', () => {
     var el;
 
-    beforeEach(function() {
+    beforeEach(() => {
       el = document.querySelector('.pippo');
     });
 
-    it('should have no class other than pippo', function() {
+    it('should have no class other than pippo', () => {
       expect(el.className).to.be.equal('pippo');
     });
   });
 });
 
-describe('handlebar templates!', function() {
+describe('handlebar templates!', () => {
   var container;
 
-  beforeEach(function() {
+  beforeEach(() => {
     container = document.createElement("div");
-    container.innerHTML = tpl.renderString('bookingform');
+    container.innerHTML = renderString('bookingform');
     document.body.appendChild(container);
   });
-  afterEach(function() {
+  afterEach(() => {
     document.body.removeChild(container);
   });
 
-  describe('when instantiated', function() {
+  describe('when instantiated', () => {
     var el;
 
-    beforeEach(function() {
+    beforeEach(() => {
       el = document.querySelector('div');
     });
 
-    it('should have the template rendered!', function() {
+    it('should have the template rendered!', () => {
       expect(el.querySelector('p').textContent).to.be.equal('Booking Form goes here');
     });
   });

@@ -3,27 +3,27 @@ module.exports = function(config) {
     basePath: 'src/',
     frameworks: ['mocha', 'chai', 'browserify'],
     files: [
-      'temp/vendor/*.js',
-      'temp/core/polyfills.js',
-      'temp/mock/server.js',
-      'temp/**/*.test.js',
+      'scripts/vendor/*.js',
+      'scripts/core/polyfills.js',
+      'scripts/mock/server.js',
+      'scripts/**/*.test.es6',
       '../views/**/*.hbs',
-      { pattern: 'temp/**/*.js',
-        included: false },
-      { pattern: 'temp/**/*.es6',
+      { pattern: 'scripts/**/*.js',
         included: false }
     ],
     preprocessors: {
-      'temp/mock/server.js': ['browserify'],
-      'temp/**/*.test.js': ['browserify'],
+      'scripts/mock/server.js': ['browserify'],
+      'scripts/**/*.test.es6': ['browserify'],
       '../**/*.hbs': 'handlebars'
     },
     browserify: {
+      // debug: true,
+      // watch: true,
+      transform: ['esnextify'],
       basedir: 'src/'
-      // watch: true
     },
     handlebarsPreprocessor: {
-      templates: "Handlebars.templates"
+      templates: 'Handlebars.templates'
     },
     colors: true,
     reporters: ['mocha'],
