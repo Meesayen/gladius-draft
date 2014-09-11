@@ -12,7 +12,10 @@
     "name": "ES5-shim",
     "url": "//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.0/es5-shim.min.js"
   }, {
+    "name": "YAPL",
+    "url": "//rawgit.com/Meesayen/yapl/master/yapl.js"
+  }, {
     "name": "Regenerator",
-    "url": "//wzrd.in/standalone/regenerator-runtime@latest"
+    "url": "//rawgit.com/Meesayen/regenerator/IE8-compatible/runtime/min.js"
   }]
 }

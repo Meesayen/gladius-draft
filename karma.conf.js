@@ -4,7 +4,6 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'browserify'],
     files: [
       'scripts/vendor/*.js',
-      'scripts/core/polyfills.js',
       'scripts/mock/server.js',
       'scripts/**/*.test.es6',
       '../views/**/*.hbs',
