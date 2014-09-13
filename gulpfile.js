@@ -111,10 +111,10 @@ gulp.task('esnext', ['copy'], function () {
     'src/scripts/!(vendor)/*.es6',
   ])
   // .pipe(cache('esnexting'))
+  .pipe(esnext())
   .pipe(nextModule({
     type: 'cjs'
   }))
-  .pipe(esnext())
 
   // Needed to support IE8. Get rid of it ASAP.
   .pipe(replace(/\.catch/g, "['catch']"))
