@@ -19,7 +19,7 @@ var
   concat = require('gulp-concat'),
   git = require('gulp-git'),
   bump = require('gulp-bump'),
-  tag_version = require('gulp-tag-version'),
+  tagVersion = require('gulp-tag-version'),
   server = require('./app'),
   serverport = 5000,
   lrport = null,
@@ -234,8 +234,9 @@ inc = function(importance) {
   return gulp.src(['./package.json'])
   .pipe(bump({type: importance}))
   .pipe(gulp.dest('./'))
-  .pipe(git.commit('bumps package version'))
-  .pipe(tag_version()) ;
+  .pipe(git.commit('Release v' + require('./package.json').version))
+  .pipe(tagVersion())
+  .pipe(git.push('origin', 'master', { args: '--tags' }));
 };
 
 gulp.task('patch', function() { return inc('patch'); });
