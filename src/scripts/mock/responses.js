@@ -23,7 +23,7 @@ exports.responses = {
       message: 'Broken!'
     }
   },
-  '/api/booking-data': {
+  '/api/awesome-list-data': {
     success: {
       title: 'Great stuff!',
       items: [{

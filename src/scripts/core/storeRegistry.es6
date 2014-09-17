@@ -82,8 +82,8 @@ export var registry = {
     }
   }],
 
-  'booking-data': {
-    'url': `${base}/booking-data`
+  'awesome-list-data': {
+    'url': `${base}/awesome-list-data`
   }
 
 };

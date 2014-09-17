@@ -39,7 +39,7 @@ describe('handlebar templates!', () => {
 
   beforeEach(() => {
     container = document.createElement("div");
-    container.innerHTML = renderString('bookingform');
+    container.innerHTML = renderString('awesomeList');
     document.body.appendChild(container);
   });
   afterEach(() => {
@@ -54,7 +54,7 @@ describe('handlebar templates!', () => {
     });
 
     it('should have the template rendered!', () => {
-      expect(el.querySelector('p').textContent).to.be.equal('Booking Form goes here');
+      expect(el.querySelector('p').textContent).to.be.equal('Here goes an awesome list!');
     });
   });
 });

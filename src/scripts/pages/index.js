@@ -40,9 +40,9 @@ setTimeout(function() {
 
 // Let's try with a template
 setTimeout(function() {
-  store.get('booking-data')
+  store.get('awesome-list-data')
     .then(function(data) {
-      document.body.appendChild(tpl.render('bookingform', data));
+      document.body.appendChild(tpl.render('awesomeList', data));
     }, function(/*err*/) {
       // console.log(err);
     });

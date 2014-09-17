@@ -28,3 +28,5 @@ public/css/*
 public/js/*
 
 src/temp/*
+
+.DS_store
