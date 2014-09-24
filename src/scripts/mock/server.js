@@ -9,13 +9,13 @@ var responseHandler = function(k, req){
     return [404, {
         'Content-Type': 'application/json'
       },
-      serialize(res.failure || 'Not found.')
+      serialize((res.failure && res.failure()) || 'Not found.')
     ];
   } else {
     return [200, {
         'Content-Type': 'application/json'
       },
-      serialize(res.success || res)
+      serialize((res.success && res.success()) || (res && res()))
     ];
   }
 };
