@@ -1,23 +1,22 @@
-/* global Handlebars */
+/* global R */
 
 var
   doc = document,
-  tmpDiv = doc.createElement('div'),
-  HB = Handlebars;
+  tmpDiv = doc.createElement('div');
 
 export var render = (key, data) => {
   var
     frag = doc.createDocumentFragment(),
     el;
-  tmpDiv.innerHTML = HB.templates[key](data || {});
+  tmpDiv.innerHTML = R.templates[key](data || {});
   while ((el = tmpDiv.firstChild)) {
     frag.appendChild(el);
   }
   return frag;
 };
 export var renderString = (key, data) => {
-  return HB.templates[key](data || {});
+  return R.templates[key](data || {});
 };
 export var get = (key) => {
-  return HB.templates[key];
+  return R.templates[key];
 };
