@@ -42,11 +42,23 @@ setTimeout(function() {
 setTimeout(function() {
   store.get('awesome-list-data')
     .then(function(data) {
-      document.body.appendChild(tpl.render('awesomeList', data));
+      document.body.appendChild(tpl.renderSync('awesomeList', data));
     }, function(/*err*/) {
       // console.log(err);
     });
-}, 4000);
+}, 1000);
+
+// Let's try with a template, async mode
+setTimeout(function() {
+  store.get('awesome-list-data')
+    .then(function(data) {
+      tpl.render('awesomeList', data).then(function(frag) {
+        document.body.appendChild(frag);
+      });
+    }, function(/*err*/) {
+      // console.log(err);
+    });
+}, 1500);
 
 // Stupid thing for a stupid test.
 module.exports.index = true;

@@ -1,19 +1,19 @@
 /* global DocumentFragment */
 /* global Text */
 
-import { render, renderString } from './tpl.es6';
+import { render, renderSync, renderString, renderStringSync } from './tpl.es6';
 
 var stupidJshint;
 
 // FIXME remove this hack when Handlebars will be removed from Karma.
 window.R = window.R || window.Handlebars;
 
-describe('Templates wrapper', () => {
+describe('tpl.es6: Templates helper', () => {
 
   beforeEach(() => {
     window["R"] = window["R"] || {};
     window["R"]["templates"] = window["R"]["templates"] || {};
-    window["R"]["templates"]["m0cu124012u3c048u12c034umc0182u3m4c908u1m23cm1823u4c890123um4c82u1m34m98c219384c92813u4c98123u4c8u"] =
+    window["R"]["templates"]["vn2537948v523048v57m2384bn84357"] =
         window["Handlebars"].template(function (R,depth0,helpers,partials,data) {
       this.compilerInfo = [4,'>= 1.0.0'];
       helpers = this.merge(helpers, R.helpers); data = data || {};
@@ -22,13 +22,45 @@ describe('Templates wrapper', () => {
   });
 
   describe('.render()', () => {
+    it('should return a Promise instance', () => {
+      var promise = render('vn2537948v523048v57m2384bn84357');
+      expect(promise).to.be.an.instanceof(Promise);
+    });
+    it('should return a DocumentFragment instance on Promise fulfillment', (done) => {
+      render('vn2537948v523048v57m2384bn84357').then(frag => {
+        expect(frag).to.be.an.instanceof(DocumentFragment);
+        done();
+      });
+    });
+    it('should produce the correct node tree', (done) => {
+      render('vn2537948v523048v57m2384bn84357').then(frag => {
+        var node = frag.firstChild;
+        if (node.nodeType === 3) {
+          node = node.nextSibling;
+        }
+        expect(node).to.be.an.instanceof(HTMLDivElement);
+        stupidJshint = expect(node.querySelector('p')).to.be.ok;
+        node = node.nextSibling;
+        expect(node).to.be.an.instanceof(Text);
+        node = node.nextSibling;
+        if (node.nodeType === 3) {
+          node = node.nextSibling;
+        }
+        expect(node).to.be.an.instanceof(HTMLUListElement);
+        expect(node.querySelectorAll('li').length).to.be.equal(2);
+        done();
+      });
+    });
+  });
+
+  describe('.renderSync()', () => {
     it('should return a DocumentFragment instance', () => {
-      var rendered = render('m0cu124012u3c048u12c034umc0182u3m4c908u1m23cm1823u4c890123um4c82u1m34m98c219384c92813u4c98123u4c8u');
+      var rendered = renderSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.an.instanceof(DocumentFragment);
     });
     it('should produce the correct node tree', () => {
       var
-        rendered = render('m0cu124012u3c048u12c034umc0182u3m4c908u1m23cm1823u4c890123um4c82u1m34m98c219384c92813u4c98123u4c8u'),
+        rendered = renderSync('vn2537948v523048v57m2384bn84357'),
         node = rendered.firstChild;
       if (node.nodeType === 3) {
         node = node.nextSibling;
@@ -45,13 +77,32 @@ describe('Templates wrapper', () => {
       expect(node.querySelectorAll('li').length).to.be.equal(2);
     });
   });
+
   describe('.renderString()', () => {
+    it('should return a Promise', () => {
+      var promise = renderString('vn2537948v523048v57m2384bn84357');
+      expect(promise).to.be.an.instanceof(Promise);
+    });
+    it('should return a string upon Promise fulfillment', () => {
+      renderString('vn2537948v523048v57m2384bn84357').then(templ => {
+        expect(templ).to.be.a('string');
+      });
+    });
+    it('should produce the correct node tree representation', () => {
+      renderString('vn2537948v523048v57m2384bn84357').then(templ => {
+        expect(templ).to.be.equal('<div>\n  <p>Booking Form goes here</p>\n' +
+          '</div>\nWelcome here\n<ul>\n  <li>one</li>\n  <li>two</li>\n</ul>\n');
+      });
+    });
+  });
+
+  describe('.renderStringSync()', () => {
     it('should return a string', () => {
-      var rendered = renderString('m0cu124012u3c048u12c034umc0182u3m4c908u1m23cm1823u4c890123um4c82u1m34m98c219384c92813u4c98123u4c8u');
+      var rendered = renderStringSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.a('string');
     });
     it('should produce the correct node tree representation', () => {
-      var rendered = renderString('m0cu124012u3c048u12c034umc0182u3m4c908u1m23cm1823u4c890123um4c82u1m34m98c219384c92813u4c98123u4c8u');
+      var rendered = renderStringSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.equal('<div>\n  <p>Booking Form goes here</p>\n' +
         '</div>\nWelcome here\n<ul>\n  <li>one</li>\n  <li>two</li>\n</ul>\n');
     });
