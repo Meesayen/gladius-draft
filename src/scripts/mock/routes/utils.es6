@@ -1,7 +1,7 @@
 import { helpers } from '../lib/faker.js';
 
 var fill = (n, l) => {
-  while (n > -1) {
+  while (n > 0) {
     n--;
     l.push(true);
   }

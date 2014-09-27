@@ -16,6 +16,11 @@ var extendProps = (props, data) => {
   }
 };
 
+// mockServer noop for production environment
+var _mockServer = window['mockServer'] || {
+  shutdown: function() {},
+  restart: function() {}
+};
 
 /**
  * Helper class that takes care of the communication with remote APIs. It will
@@ -36,7 +41,7 @@ class Store {
    *                        defined in the resource descriptor.
    * @return {Promise}
    */
-  get(id, data) {
+  get(id, data, opts={}) {
     var
       cache = this._cache,
       regProps = clone(registry[id]),
@@ -45,7 +50,7 @@ class Store {
       cacheId = data ? id + serialize(data) : id,
       comboProps;
 
-    if (cache[cacheId]) {
+    if (cache[cacheId] && !regProps.nocache && !opts.nocache) {
       return cache[cacheId];
     }
 
@@ -66,7 +71,11 @@ class Store {
             }
             mapProps = null;
             extendProps(comboProps, data);
+            if (comboProps.real || opts.real) {
+              _mockServer.shutdown();
+            }
             comboData = yield req(comboProps);
+            _mockServer.restart();
           }
           return comboData;
         } catch(err) {
@@ -75,9 +84,15 @@ class Store {
       });
     } else {
       cache[cacheId] = async(function* asyncGet() {
+        var res;
         try {
           extendProps(regProps, data);
-          return yield req(regProps);
+          if (regProps.real || opts.real) {
+            _mockServer.shutdown();
+          }
+          res = yield req(regProps);
+          _mockServer.restart();
+          return res;
         } catch(err) {
           throw err;
         }

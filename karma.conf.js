@@ -4,14 +4,14 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'browserify'],
     files: [
       'scripts/vendor/*.js',
-      'scripts/mock/server.js',
+      'scripts/mock/server.es6',
       'scripts/**/*.test.es6',
       '../views/**/*.hbs',
       { pattern: 'scripts/**/*.js',
         included: false }
     ],
     preprocessors: {
-      'scripts/mock/server.js': ['browserify'],
+      'scripts/mock/server.es6': ['browserify'],
       'scripts/**/*.test.es6': ['browserify'],
       '../**/*.hbs': 'handlebars'
     },

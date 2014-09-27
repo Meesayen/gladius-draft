@@ -1,64 +1,64 @@
-// import { store } from '../core/store';
-var deserialize = require('../core/utils.es6').deserialize;
-var store = require('../core/store.es6').store;
-var tpl = require('../core/tpl.es6');
+import { deserialize } from '../core/utils.es6';
+import { store } from '../core/store.es6';
+import tpl from '../core/tpl.es6';
 
 // Single call
-store.get('one').then(function(data) {
+store.get('one').then(data => {
   console.log(data.greetings);
 });
 // This one fails and receives default error message.
-store.get('one', {fails:true}).then(function(data) {
+store.get('one', {fails:true}).then(data => {
   console.log(data.greetings);
-}, function(err) {
+}, err => {
   console.log(deserialize(err.responseText)['message'] || err.statusText);
 });
 // This one fails and receives custom error message.
-store.get('two', {fails:true}).then(function(data) {
+store.get('two', {fails:true}).then(data => {
   console.log(data.greetings);
-}, function(err) {
+}, err => {
   console.log(deserialize(err.responseText)['message'] || err.statusText);
 });
 
 // Combo call
 store.get('combo')
-  .then(function(data) {
+  .then(data => {
     console.log(data);
-  }, function(err) {
+  }, err => {
     console.log(err);
   });
 
 // The second time it fetches the cached value
-setTimeout(function() {
+setTimeout(() => {
   store.get('combo')
-    .then(function(data) {
+    .then(data => {
       console.log(data);
-    }, function(/*err*/) {
+    }, (/*err*/) => {
       // console.log(err);
     });
 }, 3000);
 
 // Let's try with a template
-setTimeout(function() {
+setTimeout(() => {
   store.get('awesome-list-data')
-    .then(function(data) {
+    .then(data => {
       document.body.appendChild(tpl.renderSync('awesomeList', data));
-    }, function(/*err*/) {
-      // console.log(err);
+    }).catch(err => {
+      console.log(err);
     });
 }, 1000);
 
 // Let's try with a template, async mode
-setTimeout(function() {
-  store.get('awesome-list-data')
-    .then(function(data) {
-      tpl.render('awesomeList', data).then(function(frag) {
+setTimeout(() => {
+  store.get('awesome-list-data', {page:2})
+    .then(data => {
+      tpl.render('awesomeList', data).then(frag => {
         document.body.appendChild(frag);
       });
-    }, function(/*err*/) {
-      // console.log(err);
+    }).catch(err => {
+      console.log(err);
     });
 }, 1500);
 
 // Stupid thing for a stupid test.
 module.exports.index = true;
+window.store = store;

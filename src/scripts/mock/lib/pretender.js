@@ -24,7 +24,7 @@ function Pretender(maps){
 
   // capture xhr requests, channeling them into
   // the route map.
-  window.XMLHttpRequest = interceptor(this);
+  window.XMLHttpRequest = this.__fakeXMLHttpRequest = interceptor(this);
 
   // trigger the route map DSL.
   maps.call(this);
@@ -54,6 +54,20 @@ function verbify(verb){
   };
 }
 
+function throwIfURLDetected(url){
+  var HTTP_REGEXP = /^https?/;
+  var message;
+
+  if(HTTP_REGEXP.test(url)) {
+    var parser = window.document.createElement('a');
+    parser.href = url;
+
+    message = "Pretender will not respond to requests for URLs. It is not possible to accurately simluate the browser's CSP. "+
+              "Remove the " + parser.protocol +"//"+ parser.hostname +" from " + url + " and try again";
+    throw new Error(message)
+  }
+}
+
 Pretender.prototype = {
   get: verbify('GET'),
   post: verbify('POST'),
@@ -71,6 +85,9 @@ Pretender.prototype = {
   handleRequest: function handleRequest(request){
     var verb = request.method.toUpperCase();
     var path = request.url;
+
+    throwIfURLDetected(path);
+
     var handler = this._handlerFor(verb, path, request);
 
     if (handler) {
@@ -80,7 +97,7 @@ Pretender.prototype = {
       try {
         var statusHeadersAndBody = handler.handler(request),
             status = statusHeadersAndBody[0],
-            headers = statusHeadersAndBody[1],
+            headers = this.prepareHeaders(statusHeadersAndBody[1]),
             body = this.prepareBody(statusHeadersAndBody[2]);
         request.respond(status, headers, body);
         this.handledRequest(verb, path, request);
@@ -92,8 +109,9 @@ Pretender.prototype = {
       this.unhandledRequest(verb, path, request);
     }
   },
-  prepareBody: function(body){ return body; },
-  handledRequest: function(verb, path, request){/* no-op */},
+  prepareBody: function(body) { return body; },
+  prepareHeaders: function(headers) { return headers; },
+  handledRequest: function(verb, path, request) { /* no-op */},
   unhandledRequest: function(verb, path, request) {
     throw new Error("Pretender intercepted "+verb+" "+path+" but no handler was defined for this type of request");
   },
@@ -115,7 +133,10 @@ Pretender.prototype = {
   },
   shutdown: function shutdown(){
     window.XMLHttpRequest = this._nativeXMLHttpRequest;
+  },
+  restart: function restart() {
+    window.XMLHttpRequest = this.__fakeXMLHttpRequest;
   }
 };
 
-module.exports = Pretender;
+module.exports.Pretender = Pretender;

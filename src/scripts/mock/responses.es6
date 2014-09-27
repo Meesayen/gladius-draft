@@ -1,6 +1,6 @@
-var base = require('./routes/base.es6');
+import base from './routes/base.es6';
 
-exports.responses = {
+export var responses = {
   '/api/testing': base.testing,
   '/api/one': base.one,
   '/api/last': base.last,

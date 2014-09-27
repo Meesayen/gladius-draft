@@ -79,3 +79,14 @@ export var renderStringSync = (key, data) => {
 export var get = (key) => {
   return R.templates[key];
 };
+
+
+// Little trick until es6-module-transpiler would support the new syntax:
+// import { * as moduleName } from './moduleName';
+export default {
+  render: render,
+  renderSync: renderSync,
+  renderString: renderString,
+  renderStringSync: renderStringSync,
+  get: get
+};

@@ -17,6 +17,9 @@
  *   contentType: sets the Content-Type of the request. Eg: application/json
  *   crossOrigin: for cross-origin requests for browsers that support it
  *   jsonpCallback: Specify the callback function name for a JSONP request
+ *   nocache: boolean, every request will be made anew
+ *   real: (development environment only) boolean, it instructs the Store class
+ *         to temporarily disable the mock server for that specific request
  *
  * COMBO RELATED OPTIONS:
  *   id: identifier of a previously defined registry entry

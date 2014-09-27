@@ -1,4 +1,4 @@
-import { nested } from './nested-file.js';
+import nested from './nested-file.es6';
 
 describe('nested', () => {
   it('should print a fancy string', () => {

@@ -94,13 +94,14 @@ gulp.task('publish-helpers', function() {
 
 /* Mock server bundling */
 gulp.task('bundle-mock-server', ['lint', 'esnext'], function() {
-  return gulp.src(['src/temp/mock/server.js'])
+  return gulp.src(['src/temp/mock/server.es6'])
   .pipe($.browserify({
     insertGlobals: false,
     debug: true
   }))
   .pipe($.rename(function (path) {
     path.basename = 'mock-server';
+    path.extname = '.js';
   }))
   .pipe(gulp.dest('public/js'));
 });
