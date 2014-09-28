@@ -1,5 +1,5 @@
 import { deserialize } from '../core/utils.es6';
-import { store } from '../core/store.es6';
+import store from '../core/store.es6';
 import tpl from '../core/tpl.es6';
 
 // Single call

@@ -55,7 +55,7 @@
 
 var base = '/api';
 
-export var registry = {
+export default {
 
   'one': {
     'url': `${base}/one`

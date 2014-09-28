@@ -1,19 +1,20 @@
 /* global reqwest */
-import { registry } from './storeRegistry.es6';
+import registry from './storeRegistry.es6';
 import { serialize, clone, lookup, async } from './utils.es6';
 
 var req = reqwest;
 
-var extendProps = (props, data) => {
-  if (props.data) {
-    for (var k in data) {
-      if (data.hasOwnProperty(k)) {
-        props.data[k] = data[k];
-      }
-    }
-  } else {
-    props.data = data;
+var extendProps = function(props, data={}) {
+  if (!props.data) {
+    props.data = {};
   }
+  Object.keys(data).forEach(k => {
+    if (k[0] === ':') {
+      props.url = props.url.replace(k, data[k]);
+    } else {
+      props.data[k] = data[k];
+    }
+  });
 };
 
 // mockServer noop for production environment
@@ -111,4 +112,5 @@ class Store {
  * An instance of Store will be exported, to make sure it will be a Singleton
  * everytime it is required as a dependency.
  */
-export var store = new Store();
+ var store = new Store();
+ export default store;
