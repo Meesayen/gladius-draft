@@ -1,4 +1,3 @@
-/* global DocumentFragment */
 /* global Text */
 
 import { render, renderSync, renderString, renderStringSync } from './tpl.es6';
@@ -26,15 +25,15 @@ describe('tpl.es6: Templates helper', () => {
       var promise = render('vn2537948v523048v57m2384bn84357');
       expect(promise).to.be.an.instanceof(Promise);
     });
-    it('should return a DocumentFragment instance on Promise fulfillment', (done) => {
+    it('should return a HTMLElement instance on Promise fulfillment', (done) => {
       render('vn2537948v523048v57m2384bn84357').then(frag => {
-        expect(frag).to.be.an.instanceof(DocumentFragment);
+        expect(frag).to.be.an.instanceof(HTMLElement);
         done();
       });
     });
     it('should produce the correct node tree', (done) => {
       render('vn2537948v523048v57m2384bn84357').then(frag => {
-        var node = frag.firstChild;
+        var node = frag;
         if (node.nodeType === 3) {
           node = node.nextSibling;
         }
@@ -54,14 +53,14 @@ describe('tpl.es6: Templates helper', () => {
   });
 
   describe('.renderSync()', () => {
-    it('should return a DocumentFragment instance', () => {
+    it('should return a HTMLElement instance', () => {
       var rendered = renderSync('vn2537948v523048v57m2384bn84357');
-      expect(rendered).to.be.an.instanceof(DocumentFragment);
+      expect(rendered).to.be.an.instanceof(HTMLElement);
     });
     it('should produce the correct node tree', () => {
       var
         rendered = renderSync('vn2537948v523048v57m2384bn84357'),
-        node = rendered.firstChild;
+        node = rendered;
       if (node.nodeType === 3) {
         node = node.nextSibling;
       }
