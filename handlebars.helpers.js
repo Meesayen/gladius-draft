@@ -1,13 +1,16 @@
 /* global Handlebars */
+/* global R */
 (function() {
 
   // Insert new helpers here
   var helpersDict = {
-    /**
-     * Analytics link
-     */
-    'taggedAnchor': function (url, text) {
+    'taggedAnchor': function(url, text) {
       return '<a href="' + url + '">' + text + '</a>';
+    },
+
+    // client side only
+    'include': function(partialName) {
+      return R.templates[partialName](this);
     }
   };
 
