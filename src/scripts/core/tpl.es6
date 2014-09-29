@@ -44,7 +44,7 @@ export var render = (key, data, multi) => {
       while ((el = tmpDiv.firstChild)) {
         frag.appendChild(el);
       }
-      resolve(multi ? frag : frag.firstChild);
+      resolve(multi ? frag : (frag.firstChild || document.createElement('div')));
     }, err => {
       reject(err);
     });
@@ -59,7 +59,7 @@ export var renderSync = (key, data, multi) => {
   while ((el = tmpDiv.firstChild)) {
     frag.appendChild(el);
   }
-  return multi ? frag : frag.firstChild;
+  return multi ? frag : (frag.firstChild || document.createElement('div'));
 };
 
 export var get = (key) => {
