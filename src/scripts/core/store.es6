@@ -112,5 +112,5 @@ class Store {
  * An instance of Store will be exported, to make sure it will be a Singleton
  * everytime it is required as a dependency.
  */
- var store = new Store();
- export default store;
+var store = new Store();
+export default store;

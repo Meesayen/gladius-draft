@@ -8,6 +8,8 @@ module.exports = function(config) {
       'scripts/**/*.test.es6',
       '../views/**/*.hbs',
       { pattern: 'scripts/**/*.js',
+        included: false },
+      { pattern: 'scripts/**/*.es6',
         included: false }
     ],
     preprocessors: {
