@@ -1,6 +1,6 @@
 import { Pretender } from './lib/pretender.js';
 import { serialize } from '../core/utils.es6';
-import { responses } from './responses.es6';
+import responses from './responses.es6';
 
 var responseHandler = (k, req) => {
   var res = responses[k];

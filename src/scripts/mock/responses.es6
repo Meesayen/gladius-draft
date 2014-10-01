@@ -1,6 +1,6 @@
 import base from './routes/base.es6';
 
-export var responses = {
+export default {
   '/api/testing': base.testing,
   '/api/one': base.one,
   '/api/last': base.last,
