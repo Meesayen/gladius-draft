@@ -1,6 +1,6 @@
 {
   "name": "es6-boilerplate",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "scripts": {
     "test": "gulp test"
   },
