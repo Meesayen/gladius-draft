@@ -1,8 +1,67 @@
+/*!
+ *
+ * The Store is used to handle all the requests the app will make, in a fancy
+ * Promise'd way.
+ * Store will need a "registry" object containing description of the requests
+ * the app will make.
+ * Each entry in the registry could be a single call, or a combination of
+ * multiple chainable calls.
+ *
+ * TODO:
+ *  - Data aggregation in combo entries.
+ *
+ *
+ * ENTRY OPTIONS:
+ *   url: a fully qualified uri
+ *   headers: http headers (default: {})
+ *   data: JSON object descriptive of the data to be sent
+ *   type: a string enum. html, xml, json, or jsonp
+ *   contentType: sets the Content-Type of the request. Eg: application/json
+ *   crossOrigin: for cross-origin requests for browsers that support it
+ *   jsonpCallback: Specify the callback function name for a JSONP request
+ *   nocache: boolean, every request will be made anew
+ *   real: (development environment only) boolean, it instructs the Store class
+ *         to temporarily disable the mock server for that specific request
+ *
+ * COMBO RELATED OPTIONS:
+ *   id: identifier of a previously defined registry entry
+ *   map: object used to define mapping relation between the current entry data
+ *     and the previous one.
+ *
+ * COMBO EXAMPLE:
+ *   'combo': [{
+ *     'url': '/api/first',
+ *   }, {
+ *     'url': '/api/second',
+ *     'data': {
+ *       'default': 'stuff'
+ *     },
+ *     'map': {
+ *       'deeply.nested.key': 'extra'
+ *     }
+ *   }]
+ *
+ *   assuming that a call to '/api/first' produces a json like:
+ *   {
+ *     deeply: {
+ *       nested: {
+ *         key: 'extraInfo'
+ *       }
+ *     }
+ *   }
+ *
+ *   the value of the json.deeply.nested.key will be passed to the key
+ *   'extra' of the data object for the call to '/api/second'.
+ *
+ */
+
+
 /* global reqwest */
-import registry from './storeRegistry.es6';
 import { serialize, clone, lookup, async } from './utils.es6';
 
-var req = reqwest;
+var
+  req = reqwest,
+  registry = null;
 
 var extendProps = function(props, data={}) {
   if (!props.data) {
@@ -28,9 +87,13 @@ var _mockServer = window['mockServer'] || {
  * be treated as a Singleton whenever an external module requires it as a
  * dependency.
  */
-class Store {
-  constructor() {
+export default class Store {
+  constructor(_registry) {
     this._cache = {};
+    registry = _registry;
+    if (!registry || typeof registry !== 'object') {
+      console.log('No valid registry was passed to the Store constructor.');
+    }
   }
 
   /**
@@ -107,10 +170,3 @@ class Store {
     console.log(id, data);
   }
 }
-
-/**
- * An instance of Store will be exported, to make sure it will be a Singleton
- * everytime it is required as a dependency.
- */
-var store = new Store();
-export default store;
