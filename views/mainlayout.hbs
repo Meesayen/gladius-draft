@@ -2,7 +2,8 @@
   <!doctype html>
 
   <title>{{content.title}}</title>
-  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
   <link rel="stylesheet" type="text/css" href="/css/main.css">
 {{/block}}
@@ -14,8 +15,9 @@
   {{> vendorscripts}}
 
   {{!-- For Debugging Purposes Only --}}
-  {{!-- TODO: exclude this script in production environment --}}
-  <script type="text/javascript" src="/js/mock-server.js"></script>
+  {{#if __dev__}}
+    <script type="text/javascript" src="/js/mock-server.js"></script>
+  {{/if}}
 
 
   {{!-- Core Scripts --}}
@@ -26,8 +28,9 @@
   {{!-- App Script --}}
   <script type="text/javascript" src="/js/{{appScript}}"></script>
 
-  {{!-- LiveReloading
-  --}}
-  <script type="text/javascript" src="http://localhost:35729/livereload.js?snipver=1"></script>
+  {{!-- LiveReloading --}}
+  {{#if __dev__}}
+    <script type="text/javascript" src="http://localhost:35729/livereload.js?snipver=1"></script>
+  {{/if}}
 
 {{/block}}

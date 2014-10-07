@@ -11,3 +11,6 @@ before_install:
 before_script:
   - npm install -g karma karma-cli
 
+before_deploy:
+  - gulp production
+

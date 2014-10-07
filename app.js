@@ -1,6 +1,3 @@
-// configuration of express app for
-//   handlebars and static content
-
 var
   fs = require('fs'),
   express = require('express'),
@@ -73,6 +70,7 @@ fetchJson = function(id) {
 // all requests handler
 handler = function(req, res) {
   var json = fetchJson(req.params.template);
+  json.__dev__ = process.env.NODE_ENV === 'production' ? false : true;
   res.render(req.params.template, json);
 };
 
