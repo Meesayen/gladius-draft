@@ -24,11 +24,10 @@ helpers.partial = function(partialName, partialObj) {
 };
 helpers.block = function(blockName, blockObj) {
   var json = fetchJson(blockName);
-  for (var k in json) {
-    if (json.hasOwnProperty(k)) {
-      blockObj.data.root[k] = json[k];
-    }
-  }
+
+  Object.keys(json).forEach(function(k) {
+    blockObj.data.root[k] = json[k];
+  });
   if (blockName in PARTIALS) {
     return PARTIALS[blockName](blockObj.data.root);
   }

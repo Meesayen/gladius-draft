@@ -1,3 +1,5 @@
+var doc = document;
+
 /**
  * Safe Object serializer. It won't fail if undefined or null is passed, but
  * returns an empty object representation.
@@ -90,4 +92,49 @@ export var async = (gen) => {
       }
     });
   });
+};
+
+/**
+ * Better, DRYer, faster way to create elements
+ * @param  {String} type  Element TagName
+ * @param  {Object} attrs Attributes object
+ * @param  {String} text  Optional text content
+ * @return {HTMLElement}
+ */
+export var createElement = function(type, attrs={}, text=null) {
+  var el = doc.createElement(type);
+  Object.keys(attrs).forEach(k => {
+    if (el.hasOwnProperty(k) || k === 'class') {
+      if (k === 'style') {
+        if (typeof attrs[k] === 'string') {
+          el.style.cssText = attrs[k];
+        } else {
+          el.style.cssText = Object.keys(attrs[k]).map(i => {
+            return `${i}:${attrs[k][i]};`;
+          }).join('');
+        }
+      } else {
+        el.setAttribute(k, attrs[k]);
+      }
+    }
+  });
+  if (typeof text === 'string') {
+    el.appendChild(doc.createTextNode(text));
+  }
+  return el;
+};
+
+
+
+export var toArray = (arrayLike) => {
+  var arr = [];
+  try {
+    arr = [].slice.call(arrayLike);
+  } catch(e) {
+    // Thanks a lot IE 8. I mean it.
+    for (var i = 0; i < arrayLike.length; i++) {
+      arr.push(arrayLike[i]);
+    }
+  }
+  return arr;
 };
