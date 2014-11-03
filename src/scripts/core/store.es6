@@ -8,6 +8,7 @@
  * multiple chainable calls.
  *
  * TODO:
+ *  - Plain request, passing in a URL and an optional data object.
  *  - Data aggregation in combo entries.
  *
  *
