@@ -1,7 +1,7 @@
 import { deserialize } from '../core/utils.es6';
 import registry from '../config/storeRegistry.es6';
 import Store from '../core/store.es6';
-import tpl from '../core/tpl.es6';
+import * as tpl from '../core/tpl.es6';
 
 var store = new Store(registry);
 

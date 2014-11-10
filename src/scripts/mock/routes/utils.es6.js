@@ -1,4 +1,4 @@
-import { helpers } from '../lib/faker.js';
+import { helpers } from '../lib/faker';
 
 var fill = (n, l) => {
   while (n > 0) {

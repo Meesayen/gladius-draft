@@ -24,9 +24,7 @@ export var renderString = (key, data) => {
 
 export var renderStringSync = (key, data) => {
   if (window['dust']) {
-    console.warn('You must use the asynchronous method `renderString` to take' +
-        ' advantage of Dust templates.');
-    return '';
+    throw new Error('Forbidden: *Sync methods cannot be used with Dust templates.');
   }
   return R.templates[key](data || {});
 };
@@ -87,16 +85,4 @@ export var renderContentSync = (key, data) => {
     contentFrag.appendChild(el);
   }
   return contentFrag;
-};
-
-// Little trick until es6-module-transpiler would support the new syntax:
-// import { * as moduleName } from './moduleName';
-export default {
-  render: render,
-  renderSync: renderSync,
-  renderString: renderString,
-  renderStringSync: renderStringSync,
-  renderContent: renderContent,
-  renderContentSync: renderContentSync,
-  get: get
 };

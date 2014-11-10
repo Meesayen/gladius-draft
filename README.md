@@ -1,4 +1,4 @@
-ES6-boilerplate
+Gladius Draft
 ===================
 
-[![Build Status](https://travis-ci.org/Meesayen/es6-boilerplate.svg?branch=master)](https://travis-ci.org/Meesayen/es6-boilerplate) [![dependency Status](https://david-dm.org/meesayen/es6-boilerplate/status.svg?style=flat)](https://david-dm.org/meesayen/es6-boilerplate) [![devDependency Status](https://david-dm.org/meesayen/es6-boilerplate/dev-status.svg?style=flat)](https://david-dm.org/meesayen/es6-boilerplate#info=devDependencies)
+[![Build Status](https://travis-ci.org/Meesayen/gladius-draft.svg?branch=master)](https://travis-ci.org/Meesayen/gladius-draft) [![dependency Status](https://david-dm.org/meesayen/gladius-draft/status.svg?style=flat)](https://david-dm.org/meesayen/gladius-draft) [![devDependency Status](https://david-dm.org/meesayen/gladius-draft/dev-status.svg?style=flat)](https://david-dm.org/meesayen/gladius-draft#info=devDependencies)

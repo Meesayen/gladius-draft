@@ -2,22 +2,24 @@
 
 import { render, renderSync, renderString, renderStringSync } from './tpl.es6';
 
-var stupidJshint;
-
-// FIXME remove this hack when Handlebars will be removed from Karma.
-window.R = window.R || window.Handlebars;
+var IS_DUST = !!window['dust'];
 
 describe('tpl.es6: Templates helper', () => {
 
   beforeEach(() => {
     window["R"] = window["R"] || {};
     window["R"]["templates"] = window["R"]["templates"] || {};
-    window["R"]["templates"]["vn2537948v523048v57m2384bn84357"] =
-        window["Handlebars"].template(function (R,depth0,helpers,partials,data) {
-      this.compilerInfo = [4,'>= 1.0.0'];
-      helpers = this.merge(helpers, R.helpers); data = data || {};
-      return "<div>\n  <p>Booking Form goes here</p>\n</div>\nWelcome here\n<ul>\n  <li>one</li>\n  <li>two</li>\n</ul>\n";
-    });
+    var result = "<div>\n  <p>Booking Form goes here</p>\n</div>\nWelcome here\n<ul>\n  <li>one</li>\n  <li>two</li>\n</ul>\n";
+    if (IS_DUST) {
+      var body_0 = (chk) => {
+        return chk.w(result);
+      };
+      body_0.__dustBody=!0;
+      window["dust"].register("vn2537948v523048v57m2384bn84357",body_0);
+    }
+    window["R"]["templates"]["vn2537948v523048v57m2384bn84357"] = () => {
+      return result;
+    };
   });
 
   describe('.render()', () => {
@@ -38,7 +40,7 @@ describe('tpl.es6: Templates helper', () => {
           node = node.nextSibling;
         }
         expect(node).to.be.an.instanceof(HTMLDivElement);
-        stupidJshint = expect(node.querySelector('p')).to.be.ok;
+        expect(node.querySelector('p')).to.be.ok;
         node = node.nextSibling;
         expect(node).to.be.an.instanceof(Text);
         node = node.nextSibling;
@@ -53,11 +55,19 @@ describe('tpl.es6: Templates helper', () => {
   });
 
   describe('.renderSync()', () => {
-    it('should return a HTMLElement instance', () => {
+    it('should return a HTMLElement instance or throw an error when used with Dust', () => {
+      if (IS_DUST) {
+        expect(() => renderSync('vn2537948v523048v57m2384bn84357')).to.throw(Error);
+        return;
+      }
       var rendered = renderSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.an.instanceof(HTMLElement);
     });
-    it('should produce the correct node tree', () => {
+    it('should produce the correct node tree or throw an error when used with Dust', () => {
+      if (IS_DUST) {
+        expect(() => renderSync('vn2537948v523048v57m2384bn84357')).to.throw(Error);
+        return;
+      }
       var
         rendered = renderSync('vn2537948v523048v57m2384bn84357'),
         node = rendered;
@@ -65,7 +75,7 @@ describe('tpl.es6: Templates helper', () => {
         node = node.nextSibling;
       }
       expect(node).to.be.an.instanceof(HTMLDivElement);
-      stupidJshint = expect(node.querySelector('p')).to.be.ok;
+      expect(node.querySelector('p')).to.be.ok;
       node = node.nextSibling;
       expect(node).to.be.an.instanceof(Text);
       node = node.nextSibling;
@@ -96,11 +106,19 @@ describe('tpl.es6: Templates helper', () => {
   });
 
   describe('.renderStringSync()', () => {
-    it('should return a string', () => {
+    it('should return a string or throw an error when used with Dust', () => {
+      if (IS_DUST) {
+        expect(() => renderSync('vn2537948v523048v57m2384bn84357')).to.throw(Error);
+        return;
+      }
       var rendered = renderStringSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.a('string');
     });
-    it('should produce the correct node tree representation', () => {
+    it('should produce the correct node tree representation or throw an error when used with Dust', () => {
+      if (IS_DUST) {
+        expect(() => renderSync('vn2537948v523048v57m2384bn84357')).to.throw(Error);
+        return;
+      }
       var rendered = renderStringSync('vn2537948v523048v57m2384bn84357');
       expect(rendered).to.be.equal('<div>\n  <p>Booking Form goes here</p>\n' +
         '</div>\nWelcome here\n<ul>\n  <li>one</li>\n  <li>two</li>\n</ul>\n');

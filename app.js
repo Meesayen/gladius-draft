@@ -1,24 +1,18 @@
 var
   fs = require('fs'),
   express = require('express'),
-  exHb  = require('express-handlebars'),
+  consolidate = require('consolidate'),
   app = express(),
 
-  // inheritance hack
-  // FIXME should be a WeakMap
+  recursive = require('recursive-readdir'),
+  Handlebars = require('handlebars'),
+  helpers = require('./handlebars.helpers.js'),
   PARTIALS = {},
 
-  // helpers dict
-  helpers = require('./handlebars.helpers.js'),
-  handler, tpl, fetchJson;
+  handler, fetchJson;
 
 module.exports = app;
 
-
-// Extending custom helpers with Handlebars.java specific ones
-helpers.precompile = function() {
-  // Do absolute nothing.
-};
 helpers.partial = function(partialName, partialObj) {
   PARTIALS[partialName] = partialObj.fn;
 };
@@ -33,22 +27,29 @@ helpers.block = function(blockName, blockObj) {
   }
   return blockObj.fn(blockObj.data.root);
 };
-
-
-// serve static files
-app.use(express.static('public'));
-
-tpl = exHb.create({
-  defaultLayout: 'mainlayout',
-  extname: '.hbs',
-  layoutsDir: 'views/',
-  partialsDir: 'views/',
-  helpers: helpers
+// Register partials
+var templatesDir = './views/';
+recursive(templatesDir, ['*.json'], function(err, files) {
+  if (!err) {
+    files.forEach(function(file) {
+      var
+        source = fs.readFileSync(file, 'utf8'),
+        partial = /\/(.+)\.hbs/.exec(file).pop();
+      Handlebars.registerPartial(partial, source);
+    });
+  }
+});
+Object.keys(helpers).forEach(function(k) {
+  Handlebars.registerHelper(k, helpers[k]);
 });
 
-// set templates location
-app.engine('.hbs', tpl.engine);
+// serve static files
+app.use(express.static('public/'));
+
+app.engine('.hbs', consolidate.handlebars);
 app.set('view engine', '.hbs');
+
+// set templates location
 app.set('views', __dirname + '/views/');
 
 
@@ -67,9 +68,12 @@ fetchJson = function(id) {
 };
 
 // all requests handler
-handler = function(req, res) {
+handler = function(req, res, next, extra) {
   var json = fetchJson(req.params.template);
   json.__dev__ = process.env.NODE_ENV === 'production' ? false : true;
+  Object.keys(extra || {}).forEach(function(k) {
+    json[k] = extra[k];
+  });
   res.render(req.params.template, json);
 };
 
@@ -94,5 +98,6 @@ app.get('/:template', handler);
 // default index handler
 app.get('/', function(req) {
   req.params.template = 'index';
+
   handler.apply(null, arguments);
 });

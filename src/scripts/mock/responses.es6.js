@@ -1,4 +1,4 @@
-import base from './routes/base.es6';
+import * as base from './routes/base.es6';
 
 export default {
   '/api/testing': base.testing,

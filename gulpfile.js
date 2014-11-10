@@ -1,7 +1,7 @@
 /* jshint -W079 */
 var
   gulp = require('gulp'),
-  gulpBoilerplate = require('es6-gulp-boilerplate'),
+  gladius = require('gladius-forge'),
   server = require('./app');
 
 
@@ -9,7 +9,7 @@ var
  * Here you can configure the gulp build system with custom folders, different
  * build modules, etc.
  * ------------------------------------------------------------------------- */
-gulpBoilerplate.config(gulp, {
+gladius.config(gulp, {
   modules: {
     // module to use to preprocess your stylesheets. default: less
     // possible values: less, sass, sassCompass, stylus, myth.
@@ -21,38 +21,38 @@ gulpBoilerplate.config(gulp, {
   paths: {
     src: {
       // folder home of your source files (less, js, etc). default: src/
-      base: '',
+      base: 'src/',
 
       // styles sources folder. default: styles/
-      styles: 'less/',
+      styles: 'styles/',
 
       // scripts folder. default: scripts/
-      scripts: '',
+      scripts: 'scripts/',
 
       // file extension for es6+ scripts. default: .es6
-      esnextExtension: '',
+      esnextExtension: '.es6.js',
 
       // templates and partials folder: default: ../views/, partials/
-      templates: '',
-      partials: null
+      templates: '../views/',
+      partials: 'partials/'
     },
 
     out: {
       // folder destination for built bundles. default: public/
-      base: '',
+      base: 'public/',
 
       // production ready styles folder. default: css/
-      styles: '',
+      styles: 'css/',
 
       // production ready scripts folder. default: js/
-      scripts: ''
+      scripts: 'js/'
     }
   },
   // express web server to use while developing.
   // port default: 3000
   // liveReloadPort default: 35729
   server: server,
-  port: null,
+  port: 3000,
   liveReloadPort: null
 });
 
@@ -64,7 +64,7 @@ gulpBoilerplate.config(gulp, {
  * a leading '!' to remove dependencies) or add additional sources (insert a
  * leading '!' to the path to delcare sources which should be ignored).
  * ------------------------------------------------------------------------- */
-gulpBoilerplate.setupTasks({
+gladius.setupTasks({
   'bundle-js': {
     deps: [],
     src: []
@@ -86,7 +86,7 @@ gulpBoilerplate.setupTasks({
 /**
  * Add extra gulp tasks below
  * ------------------------------------------------------------------------- */
-var $ = gulpBoilerplate.getPlugins();
+var $ = gladius.getPlugins();
 
 /* Handlebars helpers bundling */
 gulp.task('publish-helpers', function() {
@@ -97,7 +97,7 @@ gulp.task('publish-helpers', function() {
 
 /* Mock server bundling */
 gulp.task('bundle-mock-server', ['lint', 'esnext'], function() {
-  return gulp.src(['src/temp/mock/server.es6'])
+  return gulp.src(['src/temp/mock/server.es6.js'])
   .pipe($.browserify({
     insertGlobals: false,
     debug: true
@@ -106,14 +106,14 @@ gulp.task('bundle-mock-server', ['lint', 'esnext'], function() {
     path.basename = 'mock-server';
     path.extname = '.js';
   }))
-  .pipe(gulp.dest('public/js'));
+  .pipe(gulp.dest('public/js/'));
 });
 
 
 /**
  * Add extra gulp watchers below
  * ------------------------------------------------------------------------- */
-gulpBoilerplate.setupWatchers(function(gulp) {
+gladius.setupWatchers(function(gulp) {
   gulp.watch('handlebars.helpers.js', ['publish-helpers']);
 });
 
@@ -123,7 +123,7 @@ gulpBoilerplate.setupWatchers(function(gulp) {
  * Here you can inject extra tasks into the main tasks. Those will be appendend
  * and concurrently run with other tasks.
  * ------------------------------------------------------------------------- */
-gulpBoilerplate.setupMain({
+gladius.setupMain({
   'development': [
     'publish-helpers'
   ],

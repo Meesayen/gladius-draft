@@ -4,27 +4,25 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'browserify'],
     files: [
       'scripts/vendor/*.js',
-      'scripts/mock/server.es6',
-      'scripts/**/*.test.es6',
-      '../views/**/*.hbs',
+      '../public/js/templates.js',
+      'scripts/mock/server.es6.js',
+      'scripts/**/*.test.es6.js',
       { pattern: 'scripts/**/*.js',
         included: false },
-      { pattern: 'scripts/**/*.es6',
+      { pattern: 'scripts/**/*.es6.js',
         included: false }
     ],
     preprocessors: {
-      'scripts/mock/server.es6': ['browserify'],
-      'scripts/**/*.test.es6': ['browserify'],
-      '../**/*.hbs': 'handlebars'
+      'scripts/mock/server.es6.js': ['browserify'],
+      'scripts/**/*.test.es6.js': ['browserify']
     },
     browserify: {
-      // debug: true,
-      // watch: true,
-      transform: ['esnextify'],
+      transform: [
+        // Hacking the way karma-bro injects transforms to pass options to
+        // the esnextify transform.
+        [{fileExt: '.es6.js'}, 'esnextify']
+      ],
       basedir: 'src/'
-    },
-    handlebarsPreprocessor: {
-      templates: 'Handlebars.templates'
     },
     colors: true,
     reporters: ['mocha'],

@@ -1,4 +1,4 @@
-import { Pretender } from './lib/pretender.js';
+import { Pretender } from './lib/pretender';
 import { serialize } from '../core/utils.es6';
 import responses from './responses.es6';
 

@@ -1,5 +1,5 @@
 import { randomList } from './utils.es6';
-import { company as fakeCompany } from '../lib/faker.js';
+import { company as fakeCompany } from '../lib/faker';
 
 export var testing = {
   success: () => ({
@@ -40,13 +40,4 @@ export var awesomeList = {
   failure: () => ({
     message: 'Broken!'
   })
-};
-
-// Little trick until es6-module-transpiler would support the new syntax:
-// import { * as moduleName } from './moduleName';
-export default {
-  testing: testing,
-  one: one,
-  last: last,
-  awesomeList: awesomeList
 };
